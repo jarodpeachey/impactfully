@@ -1,5 +1,5 @@
 {
-  "name": "impactfullt",
+  "name": "impactfully",
   "version": "1.0.0",
   "description": "impactfullyV1",
   "engines": {
@@ -23,8 +23,6 @@
     "start:production": "npm run test && npm run build && npm run start:prod",
     "start:prod": "cross-env NODE_ENV=production node server",
     "presetup": "npm i chalk shelljs",
-    "setup": "node ./internals/scripts/setup.js",
-    "clean": "shjs ./internals/scripts/clean.js",
     "clean:all": "npm run analyze:clean && npm run test:clean && npm run build:clean",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:ts",
@@ -145,7 +143,7 @@
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "circular-dependency-plugin": "5.0.2",
     "compare-versions": "3.5.0",
-    "compression-webpack-plugin": "3.0.0",
+    "compression-webpack-plugin": "^3.1.0",
     "coveralls": "3.0.4",
     "css-loader": "3.0.0",
     "error-overlay-webpack-plugin": "^0.4.1",
