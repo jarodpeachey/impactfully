@@ -1,11 +1,15 @@
 import { Reducer, Store } from 'redux';
+import { Saga } from '@redux-saga/types';
 import { RouterState } from 'connected-react-router';
 import { ContainerState as LanguageProviderState } from 'containers/LanguageProvider/types';
 
 export interface InjectedStore extends Store {
   injectedReducers: any;
   injectedSagas: any;
-  runSaga(saga: (() => IterableIterator<any>) | undefined, args: any | undefined): any;
+  runSaga(
+    saga: Saga | (() => IterableIterator<any>) | undefined,
+    args: any | undefined,
+  ): any;
 }
 
 export interface InjectReducerParams {
