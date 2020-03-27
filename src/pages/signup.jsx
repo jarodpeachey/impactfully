@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-fragments */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
@@ -8,45 +9,88 @@ import { PageLayout } from '../components/pageLayout';
 import Row from '../components/grid/row';
 import { AppContext } from '../components/AppProvider';
 
+// Instantiate the GoTrue auth client with an optional configuration
+
 const Signup = () => {
-  const { signedIn, setSignedIn } = useContext(AppContext);
+  const { signedIn, auth } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('Processing...');
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // const [state, setState] = useState({});
+  if (signedIn) {
+    setMessage('Success. Redirecting to the homepage.');
+  }
 
-  // const onNameInputChange = e => {
-  //   setState({ nameValue: e.target.value, ...state });
-  // };
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
 
-  // const onEmailInputChange = e => {
-  //   setState({ emailValue: e.target.value, ...state });
-  // };
+  const onNameInputChange = e => {
+    setName(e.target.value);
+  };
 
-  // const onPasswordInputChange = e => {
-  //   setState({ passwordValue: e.target.value, ...state });
-  // };
+  const onPasswordInputChange = e => {
+    setPassword(e.target.value);
+  };
 
-  // const onConfirmInputChange = e => {
-  //   setState({ confirmValue: e.target.value, ...state });
-  // };
+  const onConfirmInputChange = e => {
+    setConfirm(e.target.value);
+  };
+
+  const onEmailInputChange = e => {
+    setEmail(e.target.value);
+  };
 
   const onSubmit = e => {
     e.preventDefault();
 
-    setSignedIn(true);
+    const data = {
+      name
+    };
 
     setLoading(true);
 
-    setTimeout(() => {
-      window.location.pathname = '/';
-    }, 1500);
+    auth
+      .signup(email, password, data)
+      .then(response => {
+        setTimeout(() => {
+          setMessage(
+            "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+          );
+          setLoading(false);
+        }, 1250);
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+        setLoading(false);
+        setError(true);
+        setErrorMessage(
+          'There is already an account associated with this email.'
+        );
+      });
+
+    // setTimeout(() => {
+    //   window.location.pathname = '/';
+    // }, 1500);
   };
+
+  if (error) {
+    return (
+      <Wrapper className='container section'>
+        <Card>
+          <RedirectText>{errorMessage}</RedirectText>
+        </Card>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper className='container section'>
       {loading ? (
         <Card>
-          <RedirectText>Signing In...</RedirectText>
+          <RedirectText>{message}</RedirectText>
           <LinearProgress color='primary' />
         </Card>
       ) : (
@@ -74,7 +118,7 @@ const Signup = () => {
                         variant='outlined'
                         margin='dense'
                         label='Name'
-                        // onChange={() => onNameInputChange()}
+                        onChange={onNameInputChange}
                       />
                     </div>
                     <div widths={[12]}>
@@ -87,7 +131,7 @@ const Signup = () => {
                         variant='outlined'
                         margin='dense'
                         label='Email'
-                        // onChange={() => onEmailInputChange()}
+                        onChange={onEmailInputChange}
                       />
                     </div>
                     <div widths={[12]}>
@@ -100,7 +144,7 @@ const Signup = () => {
                         variant='outlined'
                         margin='dense'
                         label='Password'
-                        // onChange={() => onPasswordInputChange()}
+                        onChange={onPasswordInputChange}
                       />
                     </div>
                     <div widths={[12]}>
@@ -113,7 +157,7 @@ const Signup = () => {
                         variant='outlined'
                         margin='dense'
                         label='Verify Password'
-                        // onChange={() => onConfirmInputChange()}
+                        onChange={onConfirmInputChange}
                       />
                     </div>
                     <div widths={[12]}>

@@ -20,7 +20,8 @@ export default function PageLayout({ children, title }) {
     setShowSignupModal,
     showMessageModal,
     setShowMessageModal,
-    messageModalText
+    messageModalText,
+    auth
   } = useContext(AppContext);
 
   const closeLoginModal = () => {

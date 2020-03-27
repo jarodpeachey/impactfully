@@ -4,11 +4,29 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
+import queryString from 'query-string';
 import { PageLayout } from '../components/pageLayout';
 import Row from '../components/grid/row';
 import { AppContext } from '../components/AppProvider';
 
 const Index = () => {
+  const { auth, setUser } = useContext(AppContext);
+  // if (window.location.pathname.includes('#confirmation_token')) {
+  // }
+
+  const parsedHash = queryString.parse(window.location.hash);
+
+  if (parsedHash.confirmation_token) {
+    auth
+      .confirm(parsedHash.confirmation_token)
+      .then(user => {
+        setUser(user);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   return (
     <Wrapper>
       <Card>
