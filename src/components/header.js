@@ -81,7 +81,6 @@ const SiteTitle = styled.h1`
     margin: 0;
   }
   @media (max-width: 769px) {
-    left: ${props => (props.signedIn ? '25px' : '0')};
     font-size: 32px;
     position: relative;
     a {

@@ -54,7 +54,7 @@ const Signup = () => {
           {signedIn ? (
             <Card>
               <h2>You're already signed in! 🎉</h2>
-              <p>Click the button to start shopping.</p>
+              <p>Click the button to start exploring!</p>
               <Button variant='contained' color='primary'>
                 Let's Go
               </Button>
