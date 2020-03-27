@@ -1,89 +1,80 @@
-const fs = require('fs');
-const path = require('path');
-
-const prettierOptions = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '.prettierrc'), 'utf8'),
-);
-
 module.exports = {
-  parser: 'babel-eslint',
-  extends: ['airbnb', 'prettier', 'prettier/react'],
-  plugins: ['prettier', 'redux-saga', 'react', 'react-hooks', 'jsx-a11y'],
   env: {
-    jest: true,
     browser: true,
-    node: true,
-    es6: true,
+    es6: true
+  },
+  extends: "airbnb",
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly"
   },
   parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
+      jsx: true
     },
+    ecmaVersion: 2018,
+    sourceType: "module"
   },
+  plugins: ["react"],
   rules: {
-    'prettier/prettier': ['error', prettierOptions],
-    'arrow-body-style': [2, 'as-needed'],
-    'class-methods-use-this': 0,
-    'import/imports-first': 0,
-    'import/newline-after-import': 0,
-    'import/no-dynamic-require': 0,
-    'import/no-extraneous-dependencies': 0,
-    'import/no-named-as-default': 0,
-    'import/no-unresolved': 2,
-    'import/no-webpack-loader-syntax': 0,
-    'import/prefer-default-export': 0,
-    indent: [
-      2,
-      2,
-      {
-        SwitchCase: 1,
-      },
+    "array-bracket-spacing": [1, "never"],
+    "camelcase": [1],
+    "class-methods-use-this": 0,
+    "jsx-a11y/alt-text": 0,
+    "jsx-a11y/anchor-has-content": 1,
+    "jsx-a11y/anchor-is-valid": 1,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/heading-has-content": 1,
+    "jsx-a11y/iframe-has-title": 1,
+    "jsx-a11y/label-has-associated-control": 1,
+    "jsx-a11y/label-has-for": 0,
+    "jsx-a11y/mouse-events-have-key-events": 1,
+    "jsx-a11y/no-autofocus": 1,
+    "jsx-a11y/no-noninteractive-element-interactions": 1,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-quotes": 2,
+    "max-len": [0, 80, 4],
+    "no-console": [0],
+    "no-else-return": [0],
+    "no-multi-spaces": [0],
+    "allowIndentationTabs": true,
+    "no-multiple-empty-lines": [0],
+    "no-plusplus": [0],
+    "no-underscore-dangle": [0],
+    "object-curly-newline": 0,
+    "object-curly-spacing": [1,
+      "always", {
+        "arraysInObjects": false,
+        "objectsInObjects": true
+      }
     ],
-    'jsx-a11y/aria-props': 2,
-    'jsx-a11y/heading-has-content': 0,
-    'jsx-a11y/label-has-associated-control': [
-      2,
-      {
-        // NOTE: If this error triggers, either disable it or add
-        // your custom components, labels and attributes via these options
-        // See https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/label-has-associated-control.md
-        controlComponents: ['Input'],
-      },
-    ],
-    'jsx-a11y/label-has-for': 0,
-    'jsx-a11y/mouse-events-have-key-events': 2,
-    'jsx-a11y/role-has-required-aria-props': 2,
-    'jsx-a11y/role-supports-aria-props': 2,
-    'max-len': 0,
-    'newline-per-chained-call': 0,
-    'no-confusing-arrow': 0,
-    'no-console': 1,
-    'no-unused-vars': 2,
-    'no-use-before-define': 0,
-    'prefer-template': 2,
-    'react/destructuring-assignment': 0,
-    'react-hooks/rules-of-hooks': 'error',
-    'react/jsx-closing-tag-location': 0,
-    'react/forbid-prop-types': 0,
-    'react/jsx-first-prop-new-line': [2, 'multiline'],
-    'react/jsx-filename-extension': 0,
-    'react/jsx-no-target-blank': 0,
-    'react/jsx-uses-vars': 2,
-    'react/require-default-props': 0,
-    'react/require-extension': 0,
-    'react/self-closing-comp': 0,
-    'react/sort-comp': 0,
-    'redux-saga/no-yield-in-race': 2,
-    'redux-saga/yield-effects': 2,
-    'require-yield': 0,
+    "operator-linebreak": [1, "after"],
+    "padded-blocks": [1],
+    "prefer-destructuring": 1,
+    "quotes": [1, "single", "avoid-escape"],
+    "radix": 0,
+    "react/button-has-type": 1,
+    "react/destructuring-assignment": 0,
+    "react/forbid-prop-types": 0,
+    "react/indent-prop": 0,
+    "react/jsx-first-prop-new-line": 0,
+    "react/jsx-indent-props": 0,
+    "react/jsx-no-bind": 1,
+    "react/no-access-state-in-setstate": 1,
+    "react/no-array-index-key": 1,
+    "react/no-children-prop": 1,
+    "react/no-did-mount-set-state": 0,
+    "react/no-did-update-set-state": 0,
+    "react/no-string-refs": 1,
+    "react/no-unused-prop-types": 1,
+    "react/no-unused-state": 1,
+    "react/prefer-stateless-function": 0,
+    "react/prop-types": 1,
+    "react/require-default-props": 0,
+    "react/sort-comp": 1,
+    "space-before-function-paren": [1, {"anonymous": "always", "named": "always"}],
+    "space-in-parens": [1],
+    "template-curly-spacing": ["warn", "never"]
   },
-  settings: {
-    'import/resolver': {
-      webpack: {
-        config: './internals/webpack/webpack.prod.babel.js',
-      },
-    },
-  },
+  parser: "babel-eslint"
 };
