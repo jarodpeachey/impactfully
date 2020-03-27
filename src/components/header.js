@@ -26,13 +26,11 @@ const Header = ({ siteTitle, classes, ...styleProps }) => {
     });
   });
 
-  const backgroundColor = 'tomato';
-
   return (
-    <Wrapper scrolled={headerScrolled} backgroundColor={backgroundColor}>
+    <Wrapper scrolled={headerScrolled}>
       <Flex className='container header'>
-        <MobileNav backgroundColor={backgroundColor} />
-        <SiteTitle signedIn={signedIn} backgroundColor={backgroundColor}>
+        <MobileNav />
+        <SiteTitle signedIn={signedIn}>
           <Link to='/' className='no-underline'>
             {siteTitle}
           </Link>
@@ -46,7 +44,7 @@ const Header = ({ siteTitle, classes, ...styleProps }) => {
 
 const Wrapper = styled.div`
   transition-duration: 0.3s;
-  background: ${props => props.backgroundColor};
+  background: ${props => props.theme.colors.primary};
   top: 0;
   left: auto;
   right: 0;

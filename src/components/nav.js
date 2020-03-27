@@ -8,7 +8,6 @@ const Nav = () => {
     <>
       <Wrapper>
         <StyledMenuItem
-          backgroundColor='tomato'
           active={
             typeof window !== 'undefined'
               ? window.location.pathname === '/signup'
@@ -18,7 +17,6 @@ const Nav = () => {
           <Link to='/signup'>Signup</Link>
         </StyledMenuItem>
         <StyledMenuItem
-          backgroundColor='tomato'
           active={
             typeof window !== 'undefined'
               ? window.location.pathname === '/login'

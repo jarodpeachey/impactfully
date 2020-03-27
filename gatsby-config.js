@@ -34,8 +34,8 @@ module.exports = {
         name: 'Impactfully',
         short_name: 'Impactfully',
         start_url: '/',
-        background_color: 'tomato',
-        theme_color: 'tomato',
+        background_color: '#145ec7',
+        theme_color: '#145ec7',
         display: 'minimal-ui',
         icon: 'src/images/gatsby-icon.png'
       }
