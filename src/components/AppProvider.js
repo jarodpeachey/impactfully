@@ -8,12 +8,11 @@ const AppProvider = ({ children }) => {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageModalText, setMessageModalText] = useState(false);
-  const [signedIn, setSignedInState] = useState(localStorage.getItem('signedIn'));
+  const [signedIn, setSignedInState] = useState(false);
 
   console.log('Signed In: ', signedIn);
 
   const setSignedIn = (bool) => {
-    localStorage.setItem('signedIn', bool);
     setSignedInState(bool);
   }
 
