@@ -18,43 +18,71 @@ import { useContext } from 'react';
 import { AppContext } from '../AppProvider';
 
 const SignupModal = ({ show, toggleFunction, classes, pathname }) => {
-  const { setShowLoginModal, setSignedIn } = useContext(AppContext);
+  const { setShowLoginModal, signedIn, auth } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState({});
+  const [showForm, setShowForm] = useState(true);
+  const [message, setMessage] = useState('Processing...');
+  const [error, setError] = useState(false);
+
+  if (signedIn) {
+    setMessage('Success. Redirecting to the homepage.');
+  }
+
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
 
   const onNameInputChange = e => {
-    setState({ nameValue: e.target.value, ...state });
-  };
-
-  const onEmailInputChange = e => {
-    setState({ emailValue: e.target.value, ...state });
+    setName(e.target.value);
   };
 
   const onPasswordInputChange = e => {
-    setState({ passwordValue: e.target.value, ...state });
+    setPassword(e.target.value);
   };
 
   const onConfirmInputChange = e => {
-    setState({ confirmValue: e.target.value, ...state });
+    setConfirm(e.target.value);
+  };
+
+  const onEmailInputChange = e => {
+    setEmail(e.target.value);
   };
 
   const onSubmit = e => {
     e.preventDefault();
 
-    if (
-      state.nameValue !== '' &&
-      state.emailValue !== '' &&
-      state.passwordValue !== '' &&
-      state.confirmValue === state.passwordValue
-    ) {
-      setSignedIn(true);
+    const data = {
+      name
+    };
 
-      setLoading(true);
+    setLoading(true);
+    setShowForm(false);
+    setMessage('Processing...');
 
-      setTimeout(() => {
-        toggleFunction();
-      }, 1500);
-    }
+    auth
+      .signup(email, password, data)
+      .then(response => {
+        console.log(response);
+
+        setTimeout(() => {
+          setMessage(
+            "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+          );
+          setLoading(false);
+        }, 1250);
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+        setLoading(false);
+        setShowForm(true);
+        setError(true);
+        setMessage('There is already an account associated with this email.');
+      });
+
+    // setTimeout(() => {
+    //   window.location.pathname = '/';
+    // }, 1500);
   };
 
   const handleClose = () => {
@@ -82,84 +110,103 @@ const SignupModal = ({ show, toggleFunction, classes, pathname }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
-        {loading ? (
+        {!showForm ? (
           <>
-            <RedirectText>Signing in...</RedirectText>
-            <LinearProgress color='primary' />
+            <RedirectText>{message}</RedirectText>
+            {loading && (
+              <>
+                {/* <span>{message}</span> */}
+                <Loader color='primary' />
+              </>
+            )}
           </>
         ) : (
           <>
-            <Title>Signup</Title>
-            <Form onSubmit={onSubmit}>
-              <Row breakpoints={[769]} spacing={[12]}>
-                <div widths={[12]}>
-                  <Input
-                    id='name'
-                    type='text'
-                    fullWidth
-                    placeholder='Name'
-                    variant='outlined'
-                    margin='dense'
-                    label='Name'
-                    onChange={onNameInputChange}
-                  />
-                </div>
-                <div widths={[12]}>
-                  {' '}
-                  <Input
-                    id='email'
-                    type='text'
-                    fullWidth
-                    placeholder='Email'
-                    variant='outlined'
-                    margin='dense'
-                    label='Email'
-                    onChange={onEmailInputChange}
-                  />
-                </div>
-                <div widths={[12]}>
-                  {' '}
-                  <Input
-                    id='password'
-                    type='password'
-                    fullWidth
-                    placeholder='Password'
-                    variant='outlined'
-                    margin='dense'
-                    label='Password'
-                    onChange={onPasswordInputChange}
-                  />
-                </div>
-                <div widths={[12]}>
-                  {' '}
-                  <Input
-                    id='password-reenter'
-                    type='password'
-                    fullWidth
-                    placeholder='Verify Password'
-                    variant='outlined'
-                    margin='dense'
-                    label='Verify Password'
-                    onChange={onConfirmInputChange}
-                  />
-                </div>
-                <div widths={[12]}>
-                  {' '}
-                  <SubmitButton
-                    type='submit'
-                    color='primary'
-                    variant='contained'
-                    fullWidth
-                  >
-                    Sign Up
-                  </SubmitButton>
-                </div>
-              </Row>
-            </Form>
-            <Info>
-              Already have an account?
-              <Link onClick={switchModal}>Login</Link>
-            </Info>
+            {signedIn ? (
+              <>
+                <h2>You're already signed in! 🎉</h2>
+                <p>Click the button to start exploring!</p>
+                <Button variant='contained' color='primary'>
+                  Let's Go
+                </Button>
+              </>
+            ) : (
+              <>
+                <h1 className='mb-sm'>Sign Up</h1>
+
+                {error && <ErrorText>{message}</ErrorText>}
+                <Form onSubmit={onSubmit}>
+                  <Row breakpoints={[769]} spacing={[12]}>
+                    <div widths={[12]}>
+                      <Input
+                        id='name'
+                        type='text'
+                        fullWidth
+                        placeholder='Name'
+                        variant='outlined'
+                        margin='dense'
+                        label='Name'
+                        onChange={onNameInputChange}
+                      />
+                    </div>
+                    <div widths={[12]}>
+                      {' '}
+                      <Input
+                        id='email'
+                        type='text'
+                        fullWidth
+                        placeholder='Email'
+                        variant='outlined'
+                        margin='dense'
+                        label='Email'
+                        onChange={onEmailInputChange}
+                      />
+                    </div>
+                    <div widths={[12]}>
+                      {' '}
+                      <Input
+                        id='password'
+                        type='password'
+                        fullWidth
+                        placeholder='Password'
+                        variant='outlined'
+                        margin='dense'
+                        label='Password'
+                        onChange={onPasswordInputChange}
+                      />
+                    </div>
+                    <div widths={[12]}>
+                      {' '}
+                      <Input
+                        id='password-reenter'
+                        type='password'
+                        fullWidth
+                        placeholder='Verify Password'
+                        variant='outlined'
+                        margin='dense'
+                        label='Verify Password'
+                        onChange={onConfirmInputChange}
+                      />
+                    </div>
+                    <div widths={[12]}>
+                      {' '}
+                      <SubmitButton
+                        type='submit'
+                        color='primary'
+                        variant='contained'
+                        fullWidth
+                      >
+                        Sign Up
+                      </SubmitButton>
+                    </div>
+                  </Row>
+                </Form>
+                <Info>
+                  Already have an account?
+                  <Link onClick={switchModal}>Login</Link>
+                </Info>
+              </>
+            )}
           </>
         )}
       </DialogContent>
@@ -201,26 +248,28 @@ const styles = () => ({
   }
 });
 
-// const ModalTitleArea = styled.div`
-//   width: 100%;
-//   padding: 12px 12px 4px 12px;
-//   z-index: 999;
-//   @media (min-width: 769px) {
-//     text-align: center;
-//   }
-// `;
+const Card = styled.div`
+  padding: 24px;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 1px 1px 0px 0px #ddd, 2px 2px 5px 0px #eee;
+`;
 
 const RedirectText = styled.h2`
   text-align: center;
   margin: 0 auto;
   width: fit-content;
-  margin-bottom: 24px;
 `;
 
-const Title = styled.h2`
+const ErrorText = styled.p`
+  text-align: center;
   margin: 0 auto;
-  width: fit-content;
-  margin-bottom: 24px;
+  width: 100%;
+  background: tomato;
+  color: white;
+  font-weight: 500;
+  font-size: 17px;
+  margin: 12px 0;
 `;
 
 const Form = styled.form`
@@ -240,14 +289,8 @@ const Info = styled.div`
   margin-top: 16px;
 `;
 
-// const FormWrapper = styled.div`
-//   width: 60%;
-//   margin: 0 auto;
-//   max-width: 540px;
-// `;
-
-// const Heading = styled.h1`
-//   text-align: center;
-// `;
+const Loader = styled(LinearProgress)`
+  margin-top: 24px;
+`;
 
 export default withStyles(styles)(SignupModal);

@@ -14,9 +14,9 @@ import { AppContext } from '../components/AppProvider';
 const Signup = () => {
   const { signedIn, auth } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
   if (signedIn) {
     setMessage('Success. Redirecting to the homepage.');
@@ -51,10 +51,13 @@ const Signup = () => {
     };
 
     setLoading(true);
+    setShowForm(false);
 
     auth
       .signup(email, password, data)
       .then(response => {
+        console.log(response);
+
         setTimeout(() => {
           setMessage(
             "We've sent a confirmation email to you. Please open it and click the link to verify your account."
@@ -65,10 +68,9 @@ const Signup = () => {
       .catch(err => {
         console.log('Error: ', err);
         setLoading(false);
+        setShowForm(true);
         setError(true);
-        setErrorMessage(
-          'There is already an account associated with this email.'
-        );
+        setMessage('There is already an account associated with this email.');
       });
 
     // setTimeout(() => {
@@ -76,22 +78,27 @@ const Signup = () => {
     // }, 1500);
   };
 
-  if (error) {
-    return (
-      <Wrapper className='container section'>
-        <Card>
-          <RedirectText>{errorMessage}</RedirectText>
-        </Card>
-      </Wrapper>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <Wrapper className='container section'>
+  //       <Card>
+  //         <RedirectText>{errorMessage}</RedirectText>
+  //       </Card>
+  //     </Wrapper>
+  //   );
+  // }
 
   return (
     <Wrapper className='container section'>
-      {loading ? (
+      {!showForm ? (
         <Card>
           <RedirectText>{message}</RedirectText>
-          <LinearProgress color='primary' />
+          {loading && (
+            <>
+              {/* <span>{message}</span> */}
+              <Loader color='primary' />
+            </>
+          )}
         </Card>
       ) : (
         <>
@@ -107,6 +114,7 @@ const Signup = () => {
             <>
               <h1 className='mb-sm'>Sign Up</h1>
               <Card>
+                {error && <ErrorText>{message}</ErrorText>}
                 <Form onSubmit={onSubmit}>
                   <Row breakpoints={[769]} spacing={[12]}>
                     <div widths={[12]}>
@@ -201,7 +209,17 @@ const RedirectText = styled.h2`
   text-align: center;
   margin: 0 auto;
   width: fit-content;
-  margin-bottom: 24px;
+`;
+
+const ErrorText = styled.p`
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  background: tomato;
+  color: white;
+  font-weight: 500;
+  font-size: 17px;
+  margin: 12px 0;
 `;
 
 const Form = styled.form`
@@ -219,6 +237,10 @@ const Info = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin-top: 16px;
+`;
+
+const Loader = styled(LinearProgress)`
+  margin-top: 24px;
 `;
 
 // const FormWrapper = styled.div`

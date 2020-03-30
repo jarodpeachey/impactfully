@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-fragments */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
@@ -9,45 +10,70 @@ import Row from '../components/grid/row';
 import { AppContext } from '../components/AppProvider';
 
 const Login = () => {
-  const { signedIn, setSignedIn } = useContext(AppContext);
+  const { signedIn, auth } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(true);
+  const [message, setMessage] = useState('Processing...');
+  const [error, setError] = useState(false);
 
-  // const [state, setState] = useState({});
+  if (signedIn) {
+    setMessage('Success. Redirecting to the homepage.');
+  }
 
-  // const onNameInputChange = e => {
-  //   setState({ nameValue: e.target.value, ...state });
-  // };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  // const onEmailInputChange = e => {
-  //   setState({ emailValue: e.target.value, ...state });
-  // };
+  const onPasswordInputChange = e => {
+    setPassword(e.target.value);
+  };
 
-  // const onPasswordInputChange = e => {
-  //   setState({ passwordValue: e.target.value, ...state });
-  // };
-
-  // const onConfirmInputChange = e => {
-  //   setState({ confirmValue: e.target.value, ...state });
-  // };
+  const onEmailInputChange = e => {
+    setEmail(e.target.value);
+  };
 
   const onSubmit = e => {
     e.preventDefault();
 
-    setSignedIn(true);
-
     setLoading(true);
+    setShowForm(false);
+    setMessage('Processing...');
 
-    setTimeout(() => {
-      window.location.pathname = '/';
-    }, 1500);
+    auth
+      .login(email, password)
+      .then(response => {
+        console.log(response);
+
+        setTimeout(() => {
+          setMessage('Success! Redirecting to your dashboard...');
+        }, 1250);
+        setTimeout(() => {
+          toggleFunction();
+        }, 750);
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+        setLoading(false);
+        setShowForm(true);
+        setError(true);
+        setMessage('Incorrect username or password.');
+      });
+
+    // setTimeout(() => {
+    //   window.location.pathname = '/';
+    // }, 1500);
   };
 
   return (
     <Wrapper className='container section'>
-      {loading ? (
+      {!showForm ? (
         <Card>
-          <RedirectText>Logging in...</RedirectText>
-          <LinearProgress color='primary' />
+          <RedirectText>{message}</RedirectText>
+          {loading && (
+            <>
+              {/* <span>{message}</span> */}
+              <Loader color='primary' />
+            </>
+          )}
         </Card>
       ) : (
         <>
@@ -60,56 +86,56 @@ const Login = () => {
               </Button>
             </Card>
           ) : (
-            <>
+            <Card>
               <h1 className='mb-sm'>Log In</h1>
-              <Card>
-                <Form onSubmit={onSubmit}>
-                  <Row breakpoints={[769]} spacing={[12]}>
-                    <div widths={[12]}>
-                      {' '}
-                      <Input
-                        id='email'
-                        type='text'
-                        fullWidth
-                        placeholder='Email'
-                        variant='outlined'
-                        margin='dense'
-                        label='Email'
-                        // onChange={() => onEmailInputChange()}
-                      />
-                    </div>
-                    <div widths={[12]}>
-                      {' '}
-                      <Input
-                        id='password'
-                        type='password'
-                        fullWidth
-                        placeholder='Password'
-                        variant='outlined'
-                        margin='dense'
-                        label='Password'
-                        // onChange={() => onPasswordInputChange()}
-                      />
-                    </div>
-                    <div widths={[12]}>
-                      {' '}
-                      <SubmitButton
-                        type='submit'
-                        color='primary'
-                        variant='contained'
-                        fullWidth
-                      >
-                        Log In
-                      </SubmitButton>
-                    </div>
-                  </Row>
-                </Form>
-              </Card>
+
+              {error && <ErrorText>{message}</ErrorText>}
+              <Form onSubmit={onSubmit}>
+                <Row breakpoints={[769]} spacing={[12]}>
+                  <div widths={[12]}>
+                    {' '}
+                    <Input
+                      id='email'
+                      type='text'
+                      fullWidth
+                      placeholder='Email'
+                      variant='outlined'
+                      margin='dense'
+                      label='Email'
+                      onChange={onEmailInputChange}
+                    />
+                  </div>
+                  <div widths={[12]}>
+                    {' '}
+                    <Input
+                      id='password'
+                      type='password'
+                      fullWidth
+                      placeholder='Password'
+                      variant='outlined'
+                      margin='dense'
+                      label='Password'
+                      onChange={onPasswordInputChange}
+                    />
+                  </div>
+                  <div widths={[12]}>
+                    {' '}
+                    <SubmitButton
+                      type='submit'
+                      color='primary'
+                      variant='contained'
+                      fullWidth
+                    >
+                      Login
+                    </SubmitButton>
+                  </div>
+                </Row>
+              </Form>
               <Info>
                 Don't have an account?
-                <Link to='/signup'>Sign Up</Link>
+                <Link onClick={switchModal}>Sign Up</Link>
               </Info>
-            </>
+            </Card>
           )}
         </>
       )}
@@ -143,6 +169,10 @@ const SubmitButton = styled(Button)``;
 
 const Input = styled(TextField)`
   margin: 0 !important;
+`;
+
+const Loader = styled(LinearProgress)`
+  margin-top: 24px;
 `;
 
 const Info = styled.div`

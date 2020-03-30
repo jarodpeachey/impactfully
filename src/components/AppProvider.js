@@ -10,14 +10,18 @@ const AppProvider = ({ children }) => {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageModalText, setMessageModalText] = useState(false);
   const [signedIn, setSignedInState] = useState(false);
-  const [user, setUserState] = useState(false);
+  const [user, setUser] = useState(false);
 
   console.log('Signed In: ', signedIn);
 
-  const setUser = newUser => {
-    setUserState(newUser);
-    setSignedInState(true);
-  };
+  useEffect(() => {
+    console.log('Using effect!');
+    if (user !== auth.currentUser() && auth.currentUser() !== null) {
+      console.log('Setting user?');
+      setUser(auth.currentUser());
+      setSignedInState(true);
+    }
+  });
 
   const auth = new GoTrue({
     APIUrl: 'https://impactfully.netlify.com/.netlify/identity',
@@ -32,7 +36,6 @@ const AppProvider = ({ children }) => {
     showSignupModal,
     showLoginModal,
     signedIn,
-    setUser,
     user,
     showMessageModal,
     setShowMessageModal,
