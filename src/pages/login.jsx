@@ -39,7 +39,7 @@ const Login = () => {
     setMessage('Processing...');
 
     auth
-      .login(email, password)
+      .login(email, password, true)
       .then(response => {
         console.log(response);
 
@@ -47,7 +47,7 @@ const Login = () => {
           setMessage('Success! Redirecting to your dashboard...');
         }, 1250);
         setTimeout(() => {
-          toggleFunction();
+          window.location.pathname = '/';
         }, 750);
       })
       .catch(err => {
@@ -133,7 +133,7 @@ const Login = () => {
               </Form>
               <Info>
                 Don't have an account?
-                <Link onClick={switchModal}>Sign Up</Link>
+                <Link to='/signup'>Sign Up</Link>
               </Info>
             </Card>
           )}

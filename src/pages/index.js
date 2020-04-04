@@ -25,7 +25,7 @@ const Index = () => {
     auth
       .confirm(parsedHash.confirmation_token)
       .then(user => {
-
+        window.location.href = '/login';
       })
       .catch(err => {
         console.log(err);

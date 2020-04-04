@@ -47,7 +47,7 @@ const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
     setMessage('Processing...');
 
     auth
-      .login(email, password)
+      .login(email, password, true)
       .then(response => {
         console.log(response);
 

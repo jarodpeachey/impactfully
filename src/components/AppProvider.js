@@ -15,11 +15,19 @@ const AppProvider = ({ children }) => {
   console.log('Signed In: ', signedIn);
 
   useEffect(() => {
-    console.log('Using effect!');
+    console.log(auth);
+    console.log(auth.currentUser());
+    // if (localStorage.getItem("signedIn")) {
+
+    // }
     if (user !== auth.currentUser() && auth.currentUser() !== null) {
       console.log('Setting user?');
       setUser(auth.currentUser());
       setSignedInState(true);
+
+      // localStorage.setItem('signedIn', true);
+    } else {
+      // localStorage.setItem('signedIn', false);
     }
   });
 

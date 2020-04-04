@@ -21,9 +21,9 @@ const AccountMenu = ({ signedIn, classes, backgroundColor }) => {
   const {
     setShowLoginModal,
     setShowSignupModal,
-    setSignedIn,
     setShowMessageModal,
-    setMessageModalText
+    setMessageModalText,
+    user
   } = useContext(AppContext);
 
   const [navOpen, setNavOpen] = useState(false);
@@ -43,15 +43,30 @@ const AccountMenu = ({ signedIn, classes, backgroundColor }) => {
   };
 
   const logOutFunction = () => {
-    setSignedIn(false);
+    user
+      .logout()
+      .then(response => {
+        toggleNavOpen();
+        setMessageModalText('Logging out...');
+        setShowMessageModal(true);
 
-    toggleNavOpen();
-    setMessageModalText('Logging out...');
-    setShowMessageModal(true);
+        setTimeout(() => {
+          setShowMessageModal(false);
+        }, 1500);
+      })
+      .catch(err => {
+        console.log(err);
 
-    setTimeout(() => {
-      setShowMessageModal(false);
-    }, 1500);
+        toggleNavOpen();
+        setMessageModalText('Logging out...');
+        setShowMessageModal(true);
+
+        setTimeout(() => {
+          setMessageModalText(
+            'There was an error signing out. Please check your internet connection.'
+          );
+        }, 1500);
+      });
   };
 
   return (
