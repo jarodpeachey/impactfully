@@ -7,12 +7,14 @@ import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
 import { PageLayout } from '../components/pageLayout';
 import Row from '../components/grid/row';
-import { AppContext } from '../components/AppProvider';
+import { AppContext } from '../AppProvider';
+import { FirebaseContext } from '../FirebaseProvider';
 
 // Instantiate the GoTrue auth client with an optional configuration
 
-const Signup = () => {
-  const { signedIn, auth } = useContext(AppContext);
+const Login = () => {
+  const { firebase, signedIn } = useContext(FirebaseContext);
+
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
@@ -27,16 +29,8 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
-  const onNameInputChange = e => {
-    setName(e.target.value);
-  };
-
   const onPasswordInputChange = e => {
     setPassword(e.target.value);
-  };
-
-  const onConfirmInputChange = e => {
-    setConfirm(e.target.value);
   };
 
   const onEmailInputChange = e => {
@@ -53,16 +47,16 @@ const Signup = () => {
     setLoading(true);
     setShowForm(false);
 
-    auth
-      .signup(email, password, data)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
       .then(response => {
         console.log(response);
 
         setTimeout(() => {
-          setMessage(
-            "We've sent a confirmation email to you. Please open it and click the link to verify your account."
-          );
+          setMessage('Success!');
           setLoading(false);
+          window.location.pathname = '/';
         }, 1250);
       })
       .catch(err => {
@@ -70,7 +64,7 @@ const Signup = () => {
         setLoading(false);
         setShowForm(true);
         setError(true);
-        setMessage('There is already an account associated with this email.');
+        setMessage(err.message);
       });
 
     // setTimeout(() => {
@@ -112,23 +106,11 @@ const Signup = () => {
             </Card>
           ) : (
             <>
-              <h1 className='mb-sm'>Sign Up</h1>
+              <h1 className='mb-sm'>Log In</h1>
               <Card>
                 {error && <ErrorText>{message}</ErrorText>}
                 <Form onSubmit={onSubmit}>
                   <Row breakpoints={[769]} spacing={[12]}>
-                    <div widths={[12]}>
-                      <Input
-                        id='name'
-                        type='text'
-                        fullWidth
-                        placeholder='Name'
-                        variant='outlined'
-                        margin='dense'
-                        label='Name'
-                        onChange={onNameInputChange}
-                      />
-                    </div>
                     <div widths={[12]}>
                       {' '}
                       <Input
@@ -157,34 +139,21 @@ const Signup = () => {
                     </div>
                     <div widths={[12]}>
                       {' '}
-                      <Input
-                        id='password-reenter'
-                        type='password'
-                        fullWidth
-                        placeholder='Verify Password'
-                        variant='outlined'
-                        margin='dense'
-                        label='Verify Password'
-                        onChange={onConfirmInputChange}
-                      />
-                    </div>
-                    <div widths={[12]}>
-                      {' '}
                       <SubmitButton
                         type='submit'
                         color='primary'
                         variant='contained'
                         fullWidth
                       >
-                        Sign Up
+                        Log In
                       </SubmitButton>
                     </div>
                   </Row>
                 </Form>
               </Card>
               <Info>
-                Already have an account?
-                <Link to='/login'>Login</Link>
+                Don't have an account?
+                <Link to='/signup'>Sign Up</Link>
               </Info>
             </>
           )}
@@ -253,4 +222,4 @@ const Loader = styled(LinearProgress)`
 //   text-align: center;
 // `;
 
-export default Signup;
+export default Login;

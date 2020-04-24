@@ -15,10 +15,13 @@ import { Link } from 'gatsby';
 import Row from '../grid/row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
-import { AppContext } from '../AppProvider';
+import { AppContext } from '../../AppProvider';
+import { FirebaseContext } from '../../FirebaseProvider';
 
 const SignupModal = ({ show, toggleFunction, classes, pathname }) => {
-  const { setShowLoginModal, signedIn, auth } = useContext(AppContext);
+  const { setShowLoginModal } = useContext(AppContext);
+  const { firebase, signedIn } = useContext(FirebaseContext);
+
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
@@ -60,8 +63,8 @@ const SignupModal = ({ show, toggleFunction, classes, pathname }) => {
     setShowForm(false);
     setMessage('Processing...');
 
-    auth
-      .signup(email, password, data)
+    firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
       .then(response => {
         console.log(response);
 
@@ -77,7 +80,7 @@ const SignupModal = ({ show, toggleFunction, classes, pathname }) => {
         setLoading(false);
         setShowForm(true);
         setError(true);
-        setMessage('There is already an account associated with this email.');
+        setMessage(err.message);
       });
 
     // setTimeout(() => {

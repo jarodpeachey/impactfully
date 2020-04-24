@@ -25,7 +25,9 @@ var _ensureResources = _interopRequireDefault(require("./ensure-resources"));
 
 var _errorOverlayHandler = require("./error-overlay-handler");
 
-if (window.__webpack_hot_middleware_reporter__ !== undefined) {
+// TODO: Remove entire block when we make fast-refresh the default
+// In fast-refresh, this logic is all moved into the `error-overlay-handler`
+if (window.__webpack_hot_middleware_reporter__ !== undefined && process.env.GATSBY_HOT_LOADER !== `fast-refresh`) {
   const overlayErrorID = `webpack`; // Report build errors
 
   window.__webpack_hot_middleware_reporter__.useCustomOverlay({
@@ -63,7 +65,7 @@ const RouteHandler = props => _react.default.createElement(_router.BaseContext.P
 
 class LocationHandler extends _react.default.Component {
   render() {
-    let {
+    const {
       location
     } = this.props;
 

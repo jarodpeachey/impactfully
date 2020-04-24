@@ -5,7 +5,7 @@ import { IconButton, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, useStaticQuery, graphql } from 'gatsby';
-import { AppContext } from './AppProvider';
+import { AppContext } from '../AppProvider';
 
 const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
@@ -89,7 +89,7 @@ const AccountMenu = ({ signedIn, classes, backgroundColor }) => {
             {signedIn ? (
               <>
                 <MenuItem onClick={() => toggleNavOpen()}>
-                  <Link to='/'>Account Info</Link>
+                  <Link to='/account'>Account Info</Link>
                 </MenuItem>
               </>
             ) : (

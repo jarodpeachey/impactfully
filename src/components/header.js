@@ -8,13 +8,14 @@ import AccountMenu from './AccountMenu';
 import MobileNav from './mobileNav';
 import { withStyles } from '@material-ui/styles';
 import { useContext } from 'react';
-import { AppContext } from './AppProvider';
+import { AppContext } from '../AppProvider';
+import { FirebaseContext } from '../FirebaseProvider';
 
 const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 const Header = ({ siteTitle, classes, ...styleProps }) => {
   const [headerScrolled, setHeaderState] = useState(false);
-  const { signedIn } = useContext(AppContext);
+  const { signedIn } = useContext(FirebaseContext);
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -44,7 +45,7 @@ const Header = ({ siteTitle, classes, ...styleProps }) => {
 
 const Wrapper = styled.div`
   transition-duration: 0.3s;
-  background: ${props => props.theme.colors.primary};
+  background: ${props => props.theme.color.primary.main};
   top: 0;
   left: auto;
   right: 0;

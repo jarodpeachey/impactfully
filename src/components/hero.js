@@ -38,9 +38,9 @@
 //                     noTextLine={typeof hero.textLine !== 'string'}
 //                     color={
 //                       hero.headlineColor === 'primary'
-//                         ? ({ theme }) => theme.colors.primary
+//                         ? ({ theme }) => theme.color.primary.main
 //                         : hero.headlineColor === 'secondary'
-//                         ? ({ theme }) => theme.colors.secondary
+//                         ? ({ theme }) => theme.color.secondary.main
 //                         : hexRegex.test(hero.headlineColor)
 //                         ? hero.headlineColor
 //                         : ({ theme }) => theme.colors.white
@@ -53,9 +53,9 @@
 //                     noTextLine={typeof hero.textLine !== 'string'}
 //                     color={
 //                       hero.headlineColor === 'primary'
-//                         ? ({ theme }) => theme.colors.primary
+//                         ? ({ theme }) => theme.color.primary.main
 //                         : hero.headlineColor === 'secondary'
-//                         ? ({ theme }) => theme.colors.secondary
+//                         ? ({ theme }) => theme.color.secondary.main
 //                         : hexRegex.test(hero.headlineColor)
 //                         ? hero.headlineColor
 //                         : ({ theme }) => theme.colors.white
@@ -68,9 +68,9 @@
 //                   <Textline
 //                     textcolor={
 //                       hero.textlineColor === 'primary'
-//                         ? ({ theme }) => theme.colors.primary
+//                         ? ({ theme }) => theme.color.primary.main
 //                         : hero.textlineColor === 'secondary'
-//                         ? ({ theme }) => theme.colors.secondary
+//                         ? ({ theme }) => theme.color.secondary.main
 //                         : hexRegex.test(hero.textlineColor)
 //                         ? hero.textlineColor
 //                         : '#f7f7f7'

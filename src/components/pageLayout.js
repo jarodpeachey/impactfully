@@ -3,7 +3,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import SEO from './seo';
-import { AppContext } from './AppProvider';
+import { AppContext } from '../AppProvider';
 import LoginModal from './account/LoginModal';
 import SignupModal from './account/SignupModal';
 import MessageModal from './MessageModal';

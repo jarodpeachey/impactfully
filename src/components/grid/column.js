@@ -43,7 +43,7 @@ const Column = ({
 const Demo = styled.div`
   width: 100%;
   height: 100px;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.color.primary.main};
   color: white;
   border-radius: 4px;
   display: flex;

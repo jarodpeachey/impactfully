@@ -7,8 +7,7 @@ require('dotenv').config({
 module.exports = {
   siteMetadata: {
     title: 'Impactfully',
-    description:
-      'A website',
+    description: 'A website',
     author: '@jarodpeachey'
   },
   plugins: [
@@ -19,12 +18,6 @@ module.exports = {
       options: {
         path: `${__dirname}/src/images`,
         name: 'images'
-      }
-    },
-    {
-      resolve: 'gatsby-plugin-layout',
-      options: {
-        component: require.resolve('./src/components/layout.js')
       }
     },
     'gatsby-plugin-react-helmet',
@@ -41,12 +34,6 @@ module.exports = {
       }
     },
     'gatsby-plugin-offline',
-    'gatsby-plugin-styled-components',
-    {
-      resolve: 'gatsby-plugin-zopfli',
-      options: {
-        path: 'zopfli'
-      }
-    }
+    'gatsby-plugin-styled-components'
   ]
 };

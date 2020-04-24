@@ -1,26 +1,20 @@
 /* eslint-disable react/jsx-fragments */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import {
-  withStyles,
-  IconButton,
-  DialogTitle,
-  LinearProgress
-} from '@material-ui/core';
+import { withStyles, LinearProgress } from '@material-ui/core';
 import { Link } from 'gatsby';
-import Row from '../grid/row';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext } from 'react';
-import { AppContext } from '../../AppProvider';
-import { FirebaseContext } from '../../FirebaseProvider';
+import { PageLayout } from '../components/pageLayout';
+import Row from '../components/grid/row';
+import { AppContext } from '../AppProvider';
+import { FirebaseContext } from '../FirebaseProvider';
 
-const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
-  const { setShowSignupModal } = useContext(AppContext);
+// Instantiate the GoTrue auth client with an optional configuration
+
+const Signup = () => {
   const { firebase, signedIn } = useContext(FirebaseContext);
+
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState('Processing...');
@@ -31,10 +25,20 @@ const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
   }
 
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+
+  const onNameInputChange = e => {
+    setName(e.target.value);
+  };
 
   const onPasswordInputChange = e => {
     setPassword(e.target.value);
+  };
+
+  const onConfirmInputChange = e => {
+    setConfirm(e.target.value);
   };
 
   const onEmailInputChange = e => {
@@ -44,20 +48,23 @@ const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
   const onSubmit = e => {
     e.preventDefault();
 
+    const data = {
+      name
+    };
+
     setLoading(true);
     setShowForm(false);
-    setMessage('Processing...');
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
+    firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
       .then(response => {
         console.log(response);
 
         setTimeout(() => {
-          setMessage('Success!');
+          setMessage(
+            "We've sent a confirmation email to you. Please open it and click the link to verify your account."
+          );
           setLoading(false);
-          window.location.pathname = '/';
         }, 1250);
       })
       .catch(err => {
@@ -73,58 +80,57 @@ const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
     // }, 1500);
   };
 
-  const handleClose = () => {
-    toggleFunction();
-  };
-
-  const switchModal = () => {
-    toggleFunction();
-    setShowSignupModal(true);
-  };
+  // if (error) {
+  //   return (
+  //     <Wrapper className='container section'>
+  //       <Card>
+  //         <RedirectText>{errorMessage}</RedirectText>
+  //       </Card>
+  //     </Wrapper>
+  //   );
+  // }
 
   return (
-    <Dialog
-      classes={{ paper: classes.dialog }}
-      open={show}
-      onClose={handleClose}
-    >
-      <DialogTitle>
-        <IconButton
-          aria-label='close'
-          className={classes.closeButton}
-          onClick={handleClose}
-        >
-          <FontAwesomeIcon icon='times' />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent classes={{ root: classes.dialogContent }}>
-        {!showForm ? (
-          <>
-            <RedirectText>{message}</RedirectText>
-            {loading && (
-              <>
-                {/* <span>{message}</span> */}
-                <Loader color='primary' />
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {signedIn ? (
-              <>
-                <h2>You're already signed in! 🎉</h2>
-                <p>Click the button to start exploring!</p>
-                <Button variant='contained' color='primary'>
-                  Let's Go
-                </Button>
-              </>
-            ) : (
-              <>
-                <h1 className='mb-sm'>Log In</h1>
-
+    <Wrapper className='container section'>
+      {!showForm ? (
+        <Card>
+          <RedirectText>{message}</RedirectText>
+          {loading && (
+            <>
+              {/* <span>{message}</span> */}
+              <Loader color='primary' />
+            </>
+          )}
+        </Card>
+      ) : (
+        <>
+          {signedIn ? (
+            <Card>
+              <h2>You're already signed in! 🎉</h2>
+              <p>Click the button to start exploring!</p>
+              <Button variant='contained' color='primary'>
+                Let's Go
+              </Button>
+            </Card>
+          ) : (
+            <>
+              <h1 className='mb-sm'>Sign Up</h1>
+              <Card>
                 {error && <ErrorText>{message}</ErrorText>}
                 <Form onSubmit={onSubmit}>
                   <Row breakpoints={[769]} spacing={[12]}>
+                    <div widths={[12]}>
+                      <Input
+                        id='name'
+                        type='text'
+                        fullWidth
+                        placeholder='Name'
+                        variant='outlined'
+                        margin='dense'
+                        label='Name'
+                        onChange={onNameInputChange}
+                      />
+                    </div>
                     <div widths={[12]}>
                       {' '}
                       <Input
@@ -153,63 +159,46 @@ const LoginModal = ({ show, toggleFunction, classes, pathname }) => {
                     </div>
                     <div widths={[12]}>
                       {' '}
+                      <Input
+                        id='password-reenter'
+                        type='password'
+                        fullWidth
+                        placeholder='Verify Password'
+                        variant='outlined'
+                        margin='dense'
+                        label='Verify Password'
+                        onChange={onConfirmInputChange}
+                      />
+                    </div>
+                    <div widths={[12]}>
+                      {' '}
                       <SubmitButton
                         type='submit'
                         color='primary'
                         variant='contained'
                         fullWidth
                       >
-                        Login
+                        Sign Up
                       </SubmitButton>
                     </div>
                   </Row>
                 </Form>
-                <Info>
-                  Don't have an account?
-                  <Link onClick={switchModal}>Sign Up</Link>
-                </Info>
-              </>
-            )}
-          </>
-        )}
-      </DialogContent>
-    </Dialog>
+              </Card>
+              <Info>
+                Already have an account?
+                <Link to='/login'>Login</Link>
+              </Info>
+            </>
+          )}
+        </>
+      )}
+    </Wrapper>
   );
 };
 
-const styles = () => ({
-  dialog: {
-    width: '90%',
-    maxWidth: '350px',
-    margin: '0 auto',
-    '@media (min-width: 769px)': {
-      maxWidth: '400px'
-    },
-    '@media (max-width: 456px)': {
-      width: '100%',
-      height: '100vh',
-      maxWidth: '100%',
-      maxHeight: '100vh',
-      margin: 0
-    },
-    height: 'fit-content'
-  },
-  dialogContent: {
-    background: 'white',
-    padding: '32px 24px',
-    overflowY: 'hidden'
-    // flex: 'none !important',
-  },
-  closeButton: {
-    margin: 0,
-    display: 'block',
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    height: 50,
-    width: 50
-  }
-});
+const Wrapper = styled.div`
+  max-width: 576px;
+`;
 
 const Card = styled.div`
   padding: 24px;
@@ -256,4 +245,14 @@ const Loader = styled(LinearProgress)`
   margin-top: 24px;
 `;
 
-export default withStyles(styles)(LoginModal);
+// const FormWrapper = styled.div`
+//   width: 60%;
+//   margin: 0 auto;
+//   max-width: 540px;
+// `;
+
+// const Heading = styled.h1`
+//   text-align: center;
+// `;
+
+export default Signup;

@@ -1,7 +1,4 @@
 var plugins = [{
-      plugin: require('D:/Jarod/Code/Freelancer Gigs/Impactfully/node_modules/gatsby-plugin-layout/gatsby-ssr'),
-      options: {"plugins":[],"component":"D:\\Jarod\\Code\\Freelancer Gigs\\Impactfully\\src\\components\\layout.js"},
-    },{
       plugin: require('D:/Jarod/Code/Freelancer Gigs/Impactfully/node_modules/gatsby-plugin-react-helmet/gatsby-ssr'),
       options: {"plugins":[]},
     },{
@@ -12,6 +9,9 @@ var plugins = [{
       options: {"plugins":[]},
     },{
       plugin: require('D:/Jarod/Code/Freelancer Gigs/Impactfully/node_modules/gatsby-plugin-styled-components/gatsby-ssr'),
+      options: {"plugins":[]},
+    },{
+      plugin: require('D:/Jarod/Code/Freelancer Gigs/Impactfully/gatsby-ssr'),
       options: {"plugins":[]},
     }]
 // During bootstrap, we write requires at top of this file which looks like:

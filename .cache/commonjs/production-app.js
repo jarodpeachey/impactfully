@@ -109,7 +109,7 @@ window.___loader = _loader.publicLoader;
   }
 
   _loader.publicLoader.loadPage(browserLoc.pathname).then(page => {
-    if (!page || page.status === `error`) {
+    if (!page || page.status === _loader.PageResourceStatus.Error) {
       throw new Error(`page resources for ${browserLoc.pathname} not found. Not rendering React`);
     }
 
@@ -127,7 +127,7 @@ window.___loader = _loader.publicLoader;
       };
     }).pop();
 
-    let NewRoot = () => WrappedRoot;
+    const NewRoot = () => WrappedRoot;
 
     const renderer = (0, _apiRunnerBrowser.apiRunner)(`replaceHydrateFunction`, undefined, _reactDom.default.hydrate)[0];
     (0, _domready.default)(() => {

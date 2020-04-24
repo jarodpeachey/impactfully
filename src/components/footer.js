@@ -14,7 +14,7 @@ const Footer = ({ ...styleProps }) => {
 
 const Wrapper = styled.footer`
   padding: 16px;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.color.primary.main};
   color: white;
   margin-top: auto;
   justify-self: flex-end;

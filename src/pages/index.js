@@ -1,37 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { withStyles, LinearProgress } from '@material-ui/core';
-import { Link } from 'gatsby';
-import queryString from 'query-string';
-import { PageLayout } from '../components/pageLayout';
-import Row from '../components/grid/row';
-import { AppContext } from '../components/AppProvider';
 
 const Index = () => {
-  const { auth } = useContext(AppContext);
-  // if (window.location.pathname.includes('#confirmation_token')) {
-  // }
-
-  const [parsedHash, setParsedHash] = useState('');
-
-  useEffect(() => {
-    if (parsedHash === '')
-      setParsedHash(queryString.parse(window.location.hash));
-  });
-
-  if (parsedHash.confirmation_token) {
-    auth
-      .confirm(parsedHash.confirmation_token)
-      .then(user => {
-        window.location.href = '/login';
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
   return (
     <Wrapper>
       <Card>

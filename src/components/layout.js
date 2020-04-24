@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-fragments */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider, ThemeContext } from 'styled-components';
 import {
   faShoppingCart,
   faArrowRight,
@@ -12,13 +12,11 @@ import {
   faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { theme } from './theme';
-import PageLayout from './pageLayout';
-import AppProvider, { AppContext } from './AppProvider';
 import {
   ThemeProvider as MaterialUIThemeProvider,
   createMuiTheme
 } from '@material-ui/core/styles';
+import PageLayout from './pageLayout';
 
 library.add(
   faShoppingCart,
@@ -31,6 +29,8 @@ library.add(
 );
 
 const Layout = ({ children, pageContext }) => {
+  const theme = useContext(ThemeContext);
+
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -43,23 +43,23 @@ const Layout = ({ children, pageContext }) => {
 
   const palette = {
     primary: {
-      main: theme.colors.primary
+      main: theme.color.primary.main
     },
     secondary: {
-      main: theme.colors.secondary
+      main: theme.color.secondary.main
     },
     background: {
-      default: theme.colors.background
+      default: theme.color.primary.dark
     }
   };
 
   const breakpoints = {
     keys: ['sm', 'md', 'lg', 'xl'],
     values: {
-      sm: theme.breakpoints.small,
-      md: theme.breakpoints.medium,
-      lg: theme.breakpoints.large,
-      xl: theme.breakpoints.huge
+      sm: 576,
+      md: 769,
+      lg: 960,
+      xl: 1200
     }
   };
 
@@ -83,13 +83,7 @@ const Layout = ({ children, pageContext }) => {
 
   return (
     <MaterialUIThemeProvider theme={muiTheme}>
-      <ThemeProvider theme={theme}>
-        <AppProvider>
-          <PageLayout title={data.site.siteMetadata.title}>
-            {children}
-          </PageLayout>
-        </AppProvider>
-      </ThemeProvider>
+      <PageLayout title={data.site.siteMetadata.title}>{children}</PageLayout>
     </MaterialUIThemeProvider>
   );
 };
