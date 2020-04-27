@@ -9,7 +9,9 @@ import {
   faTrash,
   faBars,
   faTimes,
-  faUserCircle
+  faUserCircle,
+  faPencilAlt,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -25,7 +27,9 @@ library.add(
   faTrash,
   faBars,
   faTimes,
-  faUserCircle
+  faUserCircle,
+  faPencilAlt,
+  faCheck
 );
 
 const Layout = ({ children, pageContext }) => {

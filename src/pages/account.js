@@ -1,15 +1,59 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { FirebaseContext } from '../FirebaseProvider';
+import AccountInfo from '../components/account/AccountInfo';
 
 const Account = () => {
+  const { firebase, user } = useContext(FirebaseContext);
+  const [render, setRender] = useState(false);
+
+  console.log(user);
+
+  const updateName = newValue => {
+    if (newValue !== user.displayName) {
+      firebase
+        .auth()
+        .currentUser.updateProfile({
+          displayName: newValue
+        })
+        .then(res => setRender(true))
+        .catch(err => console.log(err));
+    }
+  };
+  const updateEmail = newValue => {
+    if (newValue !== user.email) {
+      user
+        .updateEmail(newValue)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
+  };
   return (
     <Wrapper>
-      <Card>
-        <CardTitle>Account Info</CardTitle>
-        <CardDescription>
-          This is some dummy content. Fill this in with user info.
-        </CardDescription>
-      </Card>
+      {user ? (
+        <Card>
+          <CardTitle>Account Info</CardTitle>
+          <CardDescription>
+            <AccountInfo
+              title='Name'
+              editFunction={updateName}
+              data={user.displayName || 'Not set'}
+            />
+            <AccountInfo
+              title='Email'
+              data={user.email}
+              editFunction={updateEmail}
+            />
+          </CardDescription>
+        </Card>
+      ) : (
+        <Card>
+          <CardTitle>Restricted</CardTitle>
+          <CardDescription>
+            This is a restricted page. Please sign in or create an account.
+          </CardDescription>
+        </Card>
+      )}
     </Wrapper>
   );
 };
@@ -27,6 +71,7 @@ const Card = styled.div`
   background: white;
   border-radius: 3px;
   box-shadow: 1px 1px 0px 0px #ddd, 2px 2px 5px 0px #eee;
+  width: 100%;
 `;
 
 const CardTitle = styled.h1`
